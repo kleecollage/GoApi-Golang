@@ -27,6 +27,18 @@ func getAlbums(ctx *gin.Context) {
 }
 
 // CONTROLLER | HANDLER
+func getAlbumByID(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	for _, a := range albums {
+		if a.ID == id {
+			ctx.IndentedJSON(http.StatusOK, a)
+		}
+	}
+	ctx.IndentedJSON(http.StatusNotFound, gin.H{"message": "album no encontrado"})
+}
+
+// CONTROLLER | HANDLER
 func postAlbums(ctx *gin.Context) {
 	var newAlbum album
 
@@ -42,7 +54,10 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/albums", getAlbums)
+	router.GET("/albums/:id", getAlbumByID)
 	router.POST("/albums", postAlbums)
+	// router.PUT("/albums/:id", updateAlbum)
+	// router.DELETE("albums/:id", deleteAlbum)
 
 	router.Run("localhost:8080")
 }
